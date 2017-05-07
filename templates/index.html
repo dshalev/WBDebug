@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WiseBreeze debug</title>
+</head>
+    <body>
+    {{range $mkey, $mval := .}}
+        <h2>{{$mkey}}</h2>
+        <ul>
+            {{range $key, $val := $mval}}
+            <li>
+                <ul>
+                    <li>Room Name: {{$val.Name}}</li>
+                    <li>Room Id: {{$val.Id}}</li>
+                    <li>Set Point: {{$val.SetPoint}}</li>
+                    <li>Power: {{$val.Power}}</li>
+                    <li>Fan: {{$val.Fan}}</li>
+                </ul>
+            </li>
+            <br>
+            {{end}}
+        </ul>
+        <br>
+    {{end}}
+    </body>
+</html>
