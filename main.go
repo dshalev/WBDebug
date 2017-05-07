@@ -65,7 +65,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	reportedRooms := []Room{}
 	desired := gjson.GetBytes(resp.Payload, "state.desired.rooms")
 	reported := gjson.GetBytes(resp.Payload, "state.reported.rooms")
-
+	println(reported.Raw)
 	desired.ForEach(func(key, value gjson.Result) bool{
 		room := Room{
 			Name: value.Get("room_name").Raw,
@@ -90,7 +90,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			RoomTemp: value.Get("room_temp").Raw,
 		}
 
-		reportedRooms = append(desiredRooms, room)
+		reportedRooms = append(reportedRooms, room)
 		return true // keep iterating
 	})
 	state := map[string][]Room{
