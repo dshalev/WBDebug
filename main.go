@@ -22,6 +22,7 @@ type Room struct {
 	Id string
 	Power string
 	Fan string
+	RoomTemp string
 }
 
 var tpl *template.Template
@@ -72,6 +73,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			Id: value.Get("room_id").Raw,
 			Power: value.Get("power").Raw,
 			Fan: value.Get("fan").Raw,
+			RoomTemp: value.Get("room_temp").Raw,
 		}
 
 		desiredRooms = append(desiredRooms, room)
@@ -85,6 +87,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 			Id: value.Get("room_id").Raw,
 			Power: value.Get("power").Raw,
 			Fan: value.Get("fan").Raw,
+			RoomTemp: value.Get("room_temp").Raw,
 		}
 
 		reportedRooms = append(desiredRooms, room)
