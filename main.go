@@ -63,9 +63,11 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	desiredRooms := []Room{}
 	reportedRooms := []Room{}
+	deltaRooms := []Room{}
 	desired := gjson.GetBytes(resp.Payload, "state.desired.rooms")
 	reported := gjson.GetBytes(resp.Payload, "state.reported.rooms")
-	println(reported.Raw)
+	delta := gjson.GetBytes(resp.Payload, "state.delta.rooms")
+
 	desired.ForEach(func(key, value gjson.Result) bool{
 		room := Room{
 			Name: value.Get("room_name").Raw,
@@ -93,9 +95,28 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		reportedRooms = append(reportedRooms, room)
 		return true // keep iterating
 	})
+
 	state := map[string][]Room{
-		"desired": desiredRooms,
-		"reported": reportedRooms,
+		"Desired": desiredRooms,
+		"Reported": reportedRooms,
 	}
+
+	if delta.Raw != "" {
+		delta.ForEach(func(key, value gjson.Result) bool{
+			room := Room{
+				Name: value.Get("room_name").Raw,
+				SetPoint: value.Get("set_point").Raw,
+				Id: value.Get("room_id").Raw,
+				Power: value.Get("power").Raw,
+				Fan: value.Get("fan").Raw,
+				RoomTemp: value.Get("room_temp").Raw,
+			}
+
+			deltaRooms = append(deltaRooms, room)
+			return true // keep iterating
+		})
+		state["Delta"] = deltaRooms
+	}
+
 	tpl.Execute(w, state)
 }
