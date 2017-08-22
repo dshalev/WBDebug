@@ -40,16 +40,18 @@ func init() {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
+	router.HandleFunc("/shadow/{thingName}", Index)
 	log.Fatal(http.ListenAndServe(":8080", router))
 
 
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	thingName := vars["thingName"]
 
 	params := &iotdataplane.GetThingShadowInput{
-		ThingName: aws.String("NucleoHomeServer"), // Required
+		ThingName: aws.String(thingName), // Required
 	}
 
 	resp, err := svc.GetThingShadow(params)
